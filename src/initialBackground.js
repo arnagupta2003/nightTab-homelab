@@ -1,15 +1,54 @@
-// inital check for systems which do not have light or dark mode
-if (localStorage.getItem('nightTabStyle')) {
-  const style = document.createElement('style');
-  style.type = 'text/css';
-  style.media = 'screen';
-  switch (localStorage.getItem('nightTabStyle')) {
-    case 'light':
-      style.innerHTML = 'html, body {background-color: rgb(255, 255, 255);}';
-      break;
-    case 'dark':
-      style.innerHTML = 'html, body {background-color: rgb(0, 0, 0);}';
-      break;
+// initial-background.js
+// Runs before nightTab loads
+// Safe place ONLY for inline data + localStorage flags
+
+(function () {
+  try {
+    /* --------------------------------------------------
+     * Background handling (no flash)
+     * -------------------------------------------------- */
+    const style = document.createElement('style')
+    style.type = 'text/css'
+    style.media = 'screen'
+
+    const savedStyle = localStorage.getItem('nightTabStyle')
+
+    if (savedStyle === 'light') {
+      style.innerHTML = 'html, body { background-color: #ffffff; }'
+    } else if (savedStyle === 'dark') {
+      style.innerHTML = 'html, body { background-color: #000000; }'
+    } else {
+      const prefersDark =
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+
+      style.innerHTML = prefersDark
+        ? 'html, body { background-color: #000000; }'
+        : 'html, body { background-color: #ffffff; }'
+    }
+
+    document.head.appendChild(style)
+
+    /* --------------------------------------------------
+     * INLINE seed (this is the only viable way here)
+     * -------------------------------------------------- */
+
+    const SEED_FLAG = '__nighttab_seeded'
+
+    if (!localStorage.getItem(SEED_FLAG)) {
+      // 🔥 PASTE YOUR seed.json CONTENTS HERE
+      const SEED_DATA = {"nightTab":true,"version":"7.6.0","state":{"language":"system","layout":{"area":{"header":{"width":100,"justify":"center"},"bookmark":{"width":100,"justify":"center"}},"alignment":"center-center","order":"header-bookmark","direction":"vertical","size":100,"width":80,"padding":40,"gutter":20,"breakpoint":"xl","scrollbar":"auto","title":"","favicon":"","overscroll":{"active":false,"unblur":false}},"header":{"item":{"justify":"left"},"greeting":{"show":false,"type":"good","custom":"","name":"","size":100,"newLine":false},"transitional":{"show":false,"type":"time-and-date","size":100,"newLine":false},"clock":{"hour":{"show":true,"display":"number"},"minute":{"show":true,"display":"number"},"second":{"show":false,"display":"number"},"separator":{"show":true,"text":""},"meridiem":{"show":false},"hour24":{"show":true},"size":100,"newLine":false},"date":{"day":{"show":false,"display":"word","weekStart":"monday","length":"long"},"date":{"show":true,"display":"number","ordinal":true},"month":{"show":true,"display":"word","length":"short","ordinal":true},"year":{"show":false,"display":"number"},"separator":{"show":true,"text":""},"format":"date-month","size":100,"newLine":false},"search":{"show":true,"width":{"by":"auto","size":30},"engine":{"selected":"google","custom":{"name":"","url":"","queryName":""}},"text":{"justify":"center"},"size":100,"newLine":false,"newTab":false},"order":["clock","date","search","toolbar"],"edit":false},"bookmark":{"size":100,"url":{"show":true},"line":{"show":true},"shadow":{"show":true},"hoverScale":{"show":true},"orientation":"bottom","style":"block","newTab":false,"edit":false,"add":false,"show":true,"item":{}},"group":{"area":{"justify":"left"},"order":"header-body","name":{"size":100},"toolbar":{"size":100},"edit":false,"add":false},"toolbar":{"location":"header","position":"bottom-right","size":100,"accent":{"show":true},"add":{"show":true},"edit":{"show":true},"newLine":false},"theme":{"color":{"range":{"primary":{"h":222,"s":14}},"contrast":{"start":17,"end":83},"shades":14},"accent":{"hsl":{"h":221,"s":100,"l":50},"rgb":{"r":0,"g":80,"b":255},"random":{"active":false,"style":"any"},"cycle":{"active":false,"speed":300,"step":10}},"font":{"display":{"name":"","weight":400,"style":"normal"},"ui":{"name":"","weight":400,"style":"normal"}},"background":{"type":"theme","color":{"hsl":{"h":221,"s":47,"l":17},"rgb":{"r":23,"g":36,"b":64}},"gradient":{"angle":160,"start":{"hsl":{"h":206,"s":16,"l":40},"rgb":{"r":86,"g":104,"b":118}},"end":{"hsl":{"h":219,"s":28,"l":12},"rgb":{"r":22,"g":28,"b":39}}},"image":{"url":"","blur":0,"grayscale":0,"scale":100,"accent":0,"opacity":100,"vignette":{"opacity":0,"start":90,"end":70}},"video":{"url":"","blur":0,"grayscale":0,"scale":100,"accent":0,"opacity":100,"vignette":{"opacity":0,"start":90,"end":70}}},"opacity":{"general":100},"layout":{"color":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0},"blur":0,"opacity":10},"divider":{"size":0}},"header":{"color":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0},"opacity":10},"search":{"opacity":100}},"bookmark":{"color":{"by":"theme","opacity":10,"hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0}},"item":{"border":0,"opacity":100}},"group":{"toolbar":{"opacity":100}},"toolbar":{"opacity":100},"style":"dark","radius":25,"shadow":75,"shade":{"opacity":30,"blur":0},"custom":{"all":[],"edit":false}},"search":false,"modal":false,"menu":true},"bookmark":[{"name":{"text":"Internal Websites","show":true},"collapse":false,"toolbar":{"openAll":{"show":true},"collapse":{"show":true}},"items":[{"url":"https://photos.kontour.in","display":{"alignment":"center-center","direction":"vertical","order":"visual-name","rotate":0,"translate":{"x":0,"y":0},"gutter":25,"name":{"show":true,"text":"Photos","size":7},"visual":{"show":true,"type":"icon","size":25,"letter":{"text":"AS"},"icon":{"name":"images","prefix":"fas","label":"Images"},"image":{"url":""},"shadow":{"size":0}}},"accent":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0}},"color":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0},"opacity":100},"background":{"show":false,"type":"image","opacity":100,"image":{"url":""},"video":{"url":""}},"border":0,"shape":{"wide":false,"tall":false},"timestamp":1626297988913},{"url":"https://files.int.kontour.in","display":{"alignment":"center-center","direction":"vertical","order":"visual-name","rotate":0,"translate":{"x":0,"y":0},"gutter":25,"name":{"show":true,"text":"Files ","size":7},"visual":{"show":true,"type":"icon","size":25,"letter":{"text":"AZ"},"icon":{"name":"folder-open","prefix":"fas","label":"Folder Open"},"image":{"url":""},"shadow":{"size":0}}},"accent":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0}},"color":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0},"opacity":100},"background":{"show":false,"type":"image","opacity":100,"image":{"url":""},"video":{"url":""}},"border":0,"shape":{"wide":false,"tall":false},"timestamp":1626297999213},{"url":"https://jellyfin.kontour.in","display":{"alignment":"center-center","direction":"vertical","order":"visual-name","rotate":0,"translate":{"x":0,"y":0},"gutter":25,"name":{"show":true,"text":"Jellyfin","size":7},"visual":{"show":true,"type":"icon","size":25,"letter":{"text":"DR"},"icon":{"name":"video","prefix":"fas","label":"Video"},"image":{"url":""},"shadow":{"size":0}}},"accent":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0}},"color":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0},"opacity":100},"background":{"show":false,"type":"image","opacity":100,"image":{"url":""},"video":{"url":""}},"border":0,"shape":{"wide":false,"tall":false},"timestamp":1626298028996}]},{"name":{"text":"External Websites","show":true},"collapse":false,"toolbar":{"openAll":{"show":true},"collapse":{"show":true}},"items":[{"url":"https://devdocs.io/","display":{"alignment":"center-center","direction":"vertical","order":"visual-name","rotate":0,"translate":{"x":0,"y":0},"gutter":25,"name":{"show":true,"text":"Devdocs","size":7},"visual":{"show":true,"type":"icon","size":25,"letter":{"text":"DEV"},"icon":{"name":"code","prefix":"fas","label":"Code"},"image":{"url":""},"shadow":{"size":0}}},"accent":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0}},"color":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0},"opacity":100},"background":{"show":false,"type":"image","opacity":100,"image":{"url":""},"video":{"url":""}},"border":0,"shape":{"wide":false,"tall":false},"timestamp":1626298034209},{"url":"https://github.com/","display":{"alignment":"center-center","direction":"vertical","order":"visual-name","rotate":0,"translate":{"x":0,"y":0},"gutter":25,"name":{"show":true,"text":"Github","size":7},"visual":{"show":true,"type":"icon","size":25,"letter":{"text":"GIT"},"icon":{"name":"github","prefix":"fab","label":"GitHub"},"image":{"url":""},"shadow":{"size":0}}},"accent":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0}},"color":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0},"opacity":100},"background":{"show":false,"type":"image","opacity":100,"image":{"url":""},"video":{"url":""}},"border":0,"shape":{"wide":false,"tall":false},"timestamp":1626298038470}]},{"name":{"text":"Internal Dev Sites","show":true},"collapse":false,"toolbar":{"size":100,"openAll":{"show":true},"collapse":{"show":true}},"items":[{"url":"https://portainer.kontour.in","display":{"alignment":"center-center","direction":"vertical","order":"visual-name","rotate":0,"translate":{"x":0,"y":0},"gutter":25,"name":{"show":true,"text":"Portainer","size":7},"visual":{"show":true,"type":"icon","size":25,"letter":{"text":""},"icon":{"name":"docker","prefix":"fab","label":"Docker"},"image":{"url":""},"shadow":{"size":0}}},"accent":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0}},"color":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0},"opacity":100},"background":{"show":false,"type":"image","opacity":100,"image":{"url":""},"video":{"url":""}},"border":0,"shape":{"wide":false,"tall":false},"timestamp":1767538859104},{"url":"https://nginx.kontour.in","display":{"alignment":"center-center","direction":"vertical","order":"visual-name","rotate":0,"translate":{"x":0,"y":0},"gutter":25,"name":{"show":true,"text":"Nginx Proxy Manager","size":7},"visual":{"show":true,"type":"icon","size":25,"letter":{"text":""},"icon":{"name":"server","prefix":"fas","label":"Server"},"image":{"url":""},"shadow":{"size":0}}},"accent":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0}},"color":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0},"opacity":100},"background":{"show":false,"type":"image","opacity":100,"image":{"url":""},"video":{"url":""}},"border":0,"shape":{"wide":false,"tall":false},"timestamp":1767538903511},{"url":"https://mail.google.com/","display":{"alignment":"center-center","direction":"vertical","order":"visual-name","rotate":0,"translate":{"x":0,"y":0},"gutter":25,"name":{"show":true,"text":"Gmail","size":7},"visual":{"show":true,"type":"letter","size":25,"letter":{"text":"GM"},"icon":{"name":"envelope","prefix":"fas","label":"Envelope"},"image":{"url":""},"shadow":{"size":0}}},"accent":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0}},"color":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0},"opacity":100},"background":{"show":false,"type":"image","opacity":100,"image":{"url":""},"video":{"url":""}},"border":0,"shape":{"wide":false,"tall":false},"timestamp":1626298011293},{"url":"https://www.reddit.com/","display":{"alignment":"center-center","direction":"vertical","order":"visual-name","rotate":0,"translate":{"x":0,"y":0},"gutter":25,"name":{"show":true,"text":"Reddit","size":7},"visual":{"show":true,"type":"icon","size":25,"letter":{"text":"R"},"icon":{"name":"reddit-alien","prefix":"fab","label":"reddit Alien"},"image":{"url":""},"shadow":{"size":0}}},"accent":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0}},"color":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0},"opacity":100},"background":{"show":false,"type":"image","opacity":100,"image":{"url":""},"video":{"url":""}},"border":0,"shape":{"wide":false,"tall":false},"timestamp":1626298017175},{"url":"https://www.netflix.com/","display":{"alignment":"center-center","direction":"vertical","order":"visual-name","rotate":0,"translate":{"x":0,"y":0},"gutter":25,"name":{"show":true,"text":"Netflix","size":7},"visual":{"show":true,"type":"icon","size":25,"letter":{"text":"N"},"icon":{"name":"film","prefix":"fas","label":"Film"},"image":{"url":""},"shadow":{"size":0}}},"accent":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0}},"color":{"by":"theme","hsl":{"h":0,"s":0,"l":0},"rgb":{"r":0,"g":0,"b":0},"opacity":100},"background":{"show":false,"type":"image","opacity":100,"image":{"url":""},"video":{"url":""}},"border":0,"shape":{"wide":false,"tall":false},"timestamp":1626298022303}]}]}
+
+      // Stage seed for later import by app bootstrap
+      localStorage.setItem(
+        'nightTab',
+        JSON.stringify(SEED_DATA)
+      )
+      localStorage.setItem(SEED_FLAG, '1')
+
+      console.info('[nightTab] Inline seed staged')
+    }
+  } catch (err) {
+    console.warn('[nightTab] initial background failed', err)
   }
-  document.querySelector('head').appendChild(style);
-}
+})()
